@@ -2,7 +2,7 @@ import express, { Express } from "express";
 import cors from "cors";
 
 import { loadEnv, connectDb, disconnectDB } from "@/config";
-import { patientRouter } from "@/routers";
+import { patientRouter, userRouter } from "@/routers";
 
 loadEnv();
 
@@ -14,7 +14,8 @@ app
   .get("/health", (_req, res) => {
     res.send("OK!");
   })
-  .use("/patient", patientRouter);
+  .use("/patients", patientRouter)
+  .use("/users", userRouter);
 
 export function init(): Promise<Express> {
   connectDb();

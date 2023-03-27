@@ -1,4 +1,4 @@
-import { getPatients } from "@/controller";
+import { getPatients } from "@/controllers";
 import { Router } from "express";
 
 const patientRouter = Router();
