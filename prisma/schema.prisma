@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id         Int          @id @default(autoincrement())
+  email      String       @unique @db.VarChar(255)
+  name       String       @db.VarChar(255)
+  password   String       @db.VarChar(255)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Session    Session[]
+  Medic      Medic?
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  User      User     @relation(fields: [userId], references: [id])
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Medic {
+  id          Int          @id @default(autoincrement())
+  userId      Int          @unique
+  User        User         @relation(fields: [userId], references: [id])
+  startHour   String
+  endHour     String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  Appointment Appointment[]
+}
+
+model Patient {
+  id          Int          @id @default(autoincrement())
+  name        String       @db.VarChar(255)
+  cpf         String       @unique
+  phone       String
+  birthday    DateTime
+  genderId    Int
+  Gender      Gender       @relation(fields: [genderId], references: [id])
+  Appointment Appointment[]
+}
+
+model Gender {
+  id         Int          @id @default(autoincrement())
+  gender     String       @db.VarChar(255)
+  Patient    Patient[]
+}
+
+model AppointmentType {
+  id         Int          @id @default(autoincrement())
+  type       String       @db.VarChar(255)
+}
+
+model AppointmentMethod {
+  id         Int          @id @default(autoincrement())
+  method     String       @db.VarChar(255)
+}
+
+model AppointmentStatus {
+  id         Int          @id @default(autoincrement())
+  status     String       @db.VarChar(255)
+}
+
+model AppointmentReason {
+  id         Int          @id @default(autoincrement())
+  reason     String       @db.VarChar(255)
+}
+
+model Appointment {
+  id         Int          @id @default(autoincrement())
+  medicId    Int
+  Medic      Medic        @relation(fields: [medicId], references: [id])
+  patientId  Int
+  Patient    Patient        @relation(fields: [patientId], references: [id])
+  date       DateTime
+  duration   String
+}
