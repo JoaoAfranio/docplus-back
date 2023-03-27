@@ -1,5 +1,5 @@
 import { createUser } from "@/controllers";
-import { validateBody } from "@/middleware/validation-middleware";
+import { validateBody } from "@/middlewares";
 import { createUserSchema } from "@/schemas/user-schemas";
 import { Router } from "express";
 
