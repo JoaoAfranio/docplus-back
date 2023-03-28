@@ -1,9 +1,14 @@
-import { getPatients } from "@/controllers";
-import { authenticateToken } from "@/middlewares";
+import { getAllPatients, createOrUpdatePatient, deletePatient } from "@/controllers";
+import { authenticateToken, validateBody } from "@/middlewares";
+import { createPatientSchema } from "@/schemas/patient-schemas";
 import { Router } from "express";
 
 const patientRouter = Router();
 
-patientRouter.all("/*", authenticateToken).get("", getPatients);
+patientRouter
+  .all("/*", authenticateToken)
+  .get("", getAllPatients)
+  .post("", validateBody(createPatientSchema), createOrUpdatePatient)
+  .delete("/:id", deletePatient);
 
 export { patientRouter };
