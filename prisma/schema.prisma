@@ -50,6 +50,8 @@ model Patient {
   birthday    DateTime
   genderId    Int
   Gender      Gender       @relation(fields: [genderId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   Appointment Appointment[]
 }
 
@@ -60,31 +62,49 @@ model Gender {
 }
 
 model AppointmentType {
-  id         Int          @id @default(autoincrement())
-  type       String       @db.VarChar(255)
+  id          Int          @id @default(autoincrement())
+  type        String       @db.VarChar(255)
+  Appointment Appointment[]
 }
 
 model AppointmentMethod {
   id         Int          @id @default(autoincrement())
   method     String       @db.VarChar(255)
+  Appointment Appointment[]
 }
 
 model AppointmentStatus {
   id         Int          @id @default(autoincrement())
   status     String       @db.VarChar(255)
+  Appointment Appointment[]
 }
 
 model AppointmentReason {
   id         Int          @id @default(autoincrement())
   reason     String       @db.VarChar(255)
+  Appointment Appointment[]
 }
 
 model Appointment {
-  id         Int          @id @default(autoincrement())
-  medicId    Int
-  Medic      Medic        @relation(fields: [medicId], references: [id])
-  patientId  Int
-  Patient    Patient        @relation(fields: [patientId], references: [id])
-  date       DateTime
-  duration   String
+  id                Int          @id @default(autoincrement())
+  date              DateTime
+  duration          String
+  
+  medicId           Int
+  Medic             Medic        @relation(fields: [medicId], references: [id])
+  patientId         Int
+  Patient           Patient        @relation(fields: [patientId], references: [id])
+
+
+  typeId            Int
+  AppointmentType   AppointmentType @relation(fields: [typeId], references: [id])
+  methodId          Int
+  AppointmentMethod AppointmentMethod @relation(fields: [methodId], references: [id])
+  statusId          Int
+  AppointmentStatus AppointmentStatus @relation(fields: [statusId], references: [id])
+  reasonId          Int
+  AppointmentReason AppointmentReason @relation(fields: [reasonId], references: [id])
+
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 }
