@@ -2,7 +2,14 @@ import { prisma } from "@/config";
 import { Prisma } from "@prisma/client";
 
 async function findAll() {
-  return prisma.patient.findMany();
+  return prisma.patient.findMany({
+    orderBy: {
+      id: "asc",
+    },
+    include: {
+      Gender: true,
+    },
+  });
 }
 
 async function upsert(createPatient: Prisma.PatientUncheckedCreateInput) {

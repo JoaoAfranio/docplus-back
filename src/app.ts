@@ -2,7 +2,7 @@ import express, { Express } from "express";
 import cors from "cors";
 
 import { loadEnv, connectDb, disconnectDB } from "@/config";
-import { patientRouter, userRouter } from "@/routers";
+import { appointmentRouter, patientRouter, userRouter } from "@/routers";
 import { authenticationRouter } from "./routers/authentication-router";
 
 loadEnv();
@@ -17,7 +17,8 @@ app
   })
   .use("/patients", patientRouter)
   .use("/users", userRouter)
-  .use("/authentication", authenticationRouter);
+  .use("/authentication", authenticationRouter)
+  .use("/appointments", appointmentRouter);
 
 export function init(): Promise<Express> {
   connectDb();

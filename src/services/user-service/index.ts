@@ -1,16 +1,16 @@
 import userRepository from "@/repositories/user-repository";
-import { User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { duplicatedEmailError } from "./errors";
 import bcrypt from "bcrypt";
 
-export async function createUser({ email, password }: CreateUserParams) {
-  await validateUniqueEmail(email);
+export async function createOrUpdateUser(newUser: Prisma.UserUncheckedCreateInput & Prisma.MedicUncheckedCreateInput) {
+  if (!newUser.id) {
+    await validateUniqueEmail(newUser.email);
+  }
 
-  const hashedPassword = await bcrypt.hash(password, 12);
-  return userRepository.create({
-    email,
-    password: hashedPassword,
-  });
+  newUser.password = await bcrypt.hash(newUser.password, 12);
+
+  return await userRepository.upsert(newUser);
 }
 
 async function validateUniqueEmail(email: string) {
@@ -20,10 +20,8 @@ async function validateUniqueEmail(email: string) {
   }
 }
 
-export type CreateUserParams = Pick<User, "email" | "password">;
-
 const userService = {
-  createUser,
+  createOrUpdateUser,
 };
 
 export * from "./errors";

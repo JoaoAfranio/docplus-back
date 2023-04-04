@@ -1,5 +1,6 @@
+import genderRepository from "@/repositories/gender-repository";
 import patientRepository from "@/repositories/patient-repository";
-import { Patient, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 export async function getAllPatients() {
   const patients = await patientRepository.findAll();
@@ -7,7 +8,7 @@ export async function getAllPatients() {
   return patients;
 }
 
-export async function createOrUpdatePatient(newPatient: CreateOrUpdatePatientParams) {
+export async function createOrUpdatePatient(newPatient: Prisma.PatientUncheckedCreateInput) {
   const patient = await patientRepository.upsert(newPatient);
   return patient;
 }
@@ -17,12 +18,16 @@ export async function deletePatient(id: number) {
   return deletedPatient;
 }
 
+export async function getGenders() {
+  const genders = await genderRepository.findAll();
+  return genders;
+}
+
 const patientService = {
   getAllPatients,
   createOrUpdatePatient,
   deletePatient,
+  getGenders,
 };
 
 export default patientService;
-
-export type CreateOrUpdatePatientParams = Prisma.PatientUncheckedCreateInput;

@@ -1,7 +1,7 @@
-import { CreateOrUpdatePatientParams } from "@/services";
+import { Prisma } from "@prisma/client";
 import Joi from "joi";
 
-export const createPatientSchema = Joi.object<CreateOrUpdatePatientParams>({
+export const createPatientSchema = Joi.object<Prisma.PatientUncheckedCreateInput>({
   id: Joi.number(),
   name: Joi.string().required(),
   cpf: Joi.string().required(),
